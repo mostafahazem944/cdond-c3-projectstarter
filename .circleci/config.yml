@@ -76,10 +76,10 @@ jobs:
           keys: [frontend-deps]
       - run:
           name: Front-end Unit Test
-          command: |
+          command:
              cd frontend
              npm install
-             npm run build
+             npm test
   test-backend:
     docker:
       - image: cimg/node:13.8.0
@@ -92,7 +92,7 @@ jobs:
           command: |
              cd backend
              npm install
-             npm run build          
+             npm test          
       # Checkout code from git
       # Restore from cache
       # Your job code here
