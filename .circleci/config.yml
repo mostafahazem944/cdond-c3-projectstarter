@@ -76,7 +76,7 @@ jobs:
           keys: [frontend-deps]
       - run:
           name: Front-end Unit Test
-          command:
+          command: |
              cd frontend
              npm install
              npm test
