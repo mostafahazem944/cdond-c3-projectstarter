@@ -194,11 +194,15 @@ jobs:
       - install_ansible
       - add_ssh_keys:
           fingerprints: ["cc:2c:09:08:ec:2c:e1:f6:e1:4b:a5:0e:0a:21:6f:06"]
-      - attach_worspace:    
-#      - run:
-#          name: Install dependencies
-#          command: |
-            # Your code here
+      - attach_worspace:
+          at: ~/
+      - run:
+          name: Configure Server
+          command: |
+             cd .circleci/ansible
+             cat inventory.txt
+             ansible-playbook -i inventory.txt configure-server.yml
+      - destroy-environment     
 #            exit 1
 #      - run:
 #          name: Configure server
@@ -337,8 +341,8 @@ workflows:
           filters:
             branches:
               only: [master]
-#      - configure-infrastructure:
-#          requires: [deploy-infrastructure]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
 #      - run-migrations:
 #          requires: [configure-infrastructure]
 #      - deploy-frontend:
