@@ -282,7 +282,8 @@ jobs:
       - checkout
       - install_awscli      
       - install_ansible
-      - install-nodejs        
+      - install-nodejs
+        
       - attach_workspace:
           at: ~/
       - restore_cache:
@@ -342,9 +343,6 @@ jobs:
             exit 1
             else
             exit 2
-            fi   
-      - destroy-environment
-      - revert-migrations 
 
 #  cloudfront-update:
 #    docker:
