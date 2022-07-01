@@ -127,14 +127,14 @@ jobs:
       # Your job code here
             
   scan-frontend:
-    docker:
+    docker: 
       - image: cimg/node:13.8.0
     steps:
       - checkout
       - restore_cache:
           keys: [frontend-deps]
       - run:
-          name: frontend-end scan
+          name: frontend-end scan 
           command: |
              cd frontend
              npm install
