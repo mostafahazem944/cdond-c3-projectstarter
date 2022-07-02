@@ -359,7 +359,7 @@ jobs:
                       list-exports --query "Exports[?Name=='WorkflowID'].Value" \
                       --no-paginate --output text)
             echo "old Workflow ID: $OLD_WORKFLOW_ID"
-            curl https://$[KVDB_BUCKET]/old_workflow_id -d "${OLD_WORKFLOW_ID}"          
+            curl https://kvdb.io/$[KVDB_BUCKET]/old_workflow_id -d "${OLD_WORKFLOW_ID}"          
       - run:
           name: Update cloudfront distribution
           command: | 
@@ -416,10 +416,10 @@ workflows:
           requires: [run-migrations]
       - deploy-backend:
           requires: [run-migrations]
-      - smoke-test:
-          requires: [deploy-backend, deploy-frontend]
-#      - cloudfront-update:
-#          requires: [deploy-backend, deploy-frontend]  
+#      - smoke-test:
+#          requires: [deploy-backend, deploy-frontend]
+      - cloudfront-update:
+          requires: [deploy-backend, deploy-frontend]  
 #          requires: [smoke-test]
 #      - cleanup:
 #          requires: [cloudfront-update]
