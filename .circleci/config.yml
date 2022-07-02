@@ -201,7 +201,7 @@ jobs:
       - install_ansible
       - install_awscli       
       - add_ssh_keys:
-          fingerprints: ["cc:2c:09:08:ec:2c:e1:f6:e1:4b:a5:0e:0a:21:6f:06"]
+          fingerprints: ["96:4e:c0:4a:24:da:8b:28:e5:c1:54:49:79:df:72:61"]
       - attach_workspace:
           at: ~/
       - run:
@@ -269,7 +269,7 @@ jobs:
             cd frontend
             npm run build
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-            echo "workfkow=$CIRCLE_WORKFLOW_ID:0:7" 
+            echo "workfkow=$CIRCLE_WORKFLOW_ID:0:7"
       - destroy-environment
       - revert-migrations           
                     
@@ -282,7 +282,7 @@ jobs:
       - install_ansible
       - install-nodejs
       - add_ssh_keys:
-          fingerprints: ["cc:2c:09:08:ec:2c:e1:f6:e1:4b:a5:0e:0a:21:6f:06"]          
+          fingerprints: ["96:4e:c0:4a:24:da:8b:28:e5:c1:54:49:79:df:72:61"]          
       - attach_workspace:
           at: ~/
       - restore_cache:
