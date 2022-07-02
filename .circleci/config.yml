@@ -86,13 +86,12 @@ jobs:
       - run:
           name: Back-end build
           command: |
-             cd ackend
+             cd backend
              npm install
              npm run build
       - save_cache:
           paths: [backend/node_modules]
-          key: backend-deps
-      - revert-migrations                  
+          key: backend-deps 
   test-frontend:
     docker:
       - image: cimg/node:13.8.0
