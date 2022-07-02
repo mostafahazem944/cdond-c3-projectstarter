@@ -55,12 +55,8 @@ commands:
           when: on_fail
           command: |
               cd ~/project/backend
-              npm install
-              npm audit fix --force --audit-level=critical   
-              npm audit fix --force --audit-level=critical       
-              npm audit fix --force --audit-level=critical                               
-              npm audit --audit-level=critical              
-              npm run migration:revert
+              npm install    
+              npm run migrations:revert
             
             
 jobs:
