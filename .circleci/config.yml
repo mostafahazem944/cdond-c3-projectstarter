@@ -54,7 +54,7 @@ commands:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS=$(curl --insecure  https://kvdb.io/${KVDB_BUCKET}/migration_<< parameters.workflow_ID >>)
+            SUCCESS=$(curl --insecure  https://kvdb.io/${KVDB_BUCKET}/migration_${CIRCLE_WORKFLOW_ID:0:7})
             SUCCESS = 1
             if(( $SUCCESS==1 )); 
             then
@@ -283,7 +283,8 @@ jobs:
       - install_awscli      
       - install_ansible
       - install-nodejs
-        
+      - add_ssh_keys:
+          fingerprints: ["cc:2c:09:08:ec:2c:e1:f6:e1:4b:a5:0e:0a:21:6f:06"]          
       - attach_workspace:
           at: ~/
       - restore_cache:
@@ -343,6 +344,9 @@ jobs:
             exit 1
             else
             exit 2
+            fi   
+      - destroy-environment
+      - revert-migrations 
 
 #  cloudfront-update:
 #    docker:
