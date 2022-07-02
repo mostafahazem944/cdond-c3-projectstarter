@@ -344,19 +344,30 @@ jobs:
 #      - destroy-environment
 #      - revert-migrations 
 
-#  cloudfront-update:
-#    docker:
-      # Docker image here that supports AWS CLI
-#    steps:
-      # Checkout code from git
-#      - run:
-#          name: Install dependencies
-#          command: |
-            # your code here
-#      - run:
-#          name: Update cloudfront distribution
-#          command: |
-            # your code here
+  cloudfront-update:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - install_awscli
+      - install-nodejs
+      - run:
+          name: Save old workflow ID to kvdb.io
+          command: |
+            export OLD_WORKFLOW_ID=$(aws cloudformation \
+                      list-exports --query "Exports[?Name==\'workflowID\'].Value" \
+                      --no-paginate --output text)
+            echo "old workflow ID: $OLD_WORKFLOW_ID"
+            curl https://$[KVDB_BUCKET]/old_workflow_id -d "${OLD_WORKFLOW_ID}"          
+      - run:
+          name: Update cloudfront distribution
+          command: | 
+            aws cloudformation deploy \
+              --template-file .circleci/files/cloudfront.yml \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}" \
+              --stack-name InitialStack \
+      - destroy-environment
+      - revert-migrations 
       # Here's where you will add some code to rollback on failure  
 
 #cleanup:
@@ -406,7 +417,8 @@ workflows:
           requires: [run-migrations]
 #      - smoke-test:
 #          requires: [deploy-backend, deploy-frontend]
-#      - cloudfront-update:
+      - cloudfront-update:
+          requires: [deploy-backend, deploy-frontend]
 #          requires: [smoke-test]
 #      - cleanup:
 #          requires: [cloudfront-update]
