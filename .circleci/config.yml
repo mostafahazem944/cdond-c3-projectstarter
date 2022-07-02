@@ -57,7 +57,8 @@ commands:
               cd ~/project/backend
               npm install
               npm audit fix --force --audit-level=critical   
-              npm audit fix --force --audit-level=critical                       
+              npm audit fix --force --audit-level=critical       
+              npm audit fix --force --audit-level=critical                               
               npm audit --audit-level=critical              
               npm run migration:revert
             
