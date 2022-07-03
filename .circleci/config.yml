@@ -343,6 +343,7 @@ jobs:
             exit 0
             else
             exit 1
+            echo "URL: $FRONTEND_WEBSITE"
             fi   
       - destroy-environment
       - revert-migrations 
