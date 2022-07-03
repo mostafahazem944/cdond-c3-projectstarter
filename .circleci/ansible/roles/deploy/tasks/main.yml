@@ -33,7 +33,7 @@
 - name: install ans start app
   command:  pm2 start main.js
   args:
-    chdir: ~/backend-app
+    chdir: ~/backend/dist
   environment:
     ENVIRONMENT: production
     TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"
