@@ -45,7 +45,7 @@
     TYPEORM_USERNAME: "{{ lookup('env', 'TYPEORM_USERNAME') }}"
     TYPEORM_PASSWORD: "{{ lookup('env', 'TYPEORM_PASSWORD') }}"
     TYPEORM_DATABASE: "{{ lookup('env', 'TYPEORM_DATABASE') }}"
-    - name: install ans start app
+- name: install ans start app
   command:  pm2 start main.js
   args:
     chdir: /home/ubuntu/backend-app/dist
