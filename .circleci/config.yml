@@ -337,13 +337,13 @@ jobs:
       - run:
           name: Frontend smoke test.
           command: |
-            FRONTEND_WEBSITE="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com"  
+            FRONTEND_WEBSITE=http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-east-1.amazonaws.com 
             if curl -s $FRONTEND_WEBSITE | grep "welcome"
             then
-            exit 0
+              exit 0
             else
-            exit 1
-            fi   
+              exit 1
+            fi        
             echo "url: $FRONTEND_WEBSITE"
       - destroy-environment
       - revert-migrations 
@@ -374,24 +374,34 @@ jobs:
       - revert-migrations 
       # Here's where you will add some code to rollback on failure  
 
-#cleanup:
-#    docker:
-      # Docker image here
-#    steps:
-      # Checkout code from git
-#      - run:
-#          name: Get old stack workflow id
-#          command: |
+  cleanup:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - install_awscli
+      - install-nodejs
+      - run:
+          name: Get old stack workflow id
+          command: |
             # your code here
-#            export OldWorkflowID="the id here"
-#            export STACKS=[] #put the list of stacks here
-#      - run:
-#          name: Remove old stacks and files
-#          command: |
-#            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
-#            then
-              # your code here
-#            fi
+            export OldWorkflowID="the id here"
+            export STACKS=[] #put the list of stacks here
+      - run:
+          name: Remove old stacks and files
+          command: |
+            export STACKS=($(aws cloudformation list-stacks \
+                --query "StackSummaries[*].StackName" \
+                --stack-status-filter CREATE_COMPLETE--no-paginate --output text))
+            echo Stack names: "${STACKS[@]}"
+            export OldWorkflowID=$(curl --insecure https://kvdb.io/NQ8MiLo3Fu7fUNoseByRiQ/old_workflow_id)
+            echo Old Workflow ID: $OldWorkflowID
+            if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+            then
+              aws rm "s3://udapeople-"${OldWorkflowID}" --recursive
+              aws cloudformation delete-stack --stack-name "udapeople-backend-"${OldWorkflowID}"
+              aws cloudformation delete-stack --stack-name "udapeople-forntend-"${OldWorkflowID}" 
+            fi
 
 workflows:
   default:
@@ -423,5 +433,5 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update: 
           requires: [smoke-test]
-#      - cleanup:
-#          requires: [cloudfront-update]
+      - cleanup:
+          requires: [cloudfront-update]
