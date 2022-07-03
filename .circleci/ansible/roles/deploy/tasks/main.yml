@@ -32,9 +32,7 @@
     env PATH=$PATH:/usr/local/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu
 - name: install ans start app
   args:
-  shell: |
-    cd /home/ubuntu/backend-app/dist
-    pm2 start main.js
+    chdir: /home/ubuntu/backend-app/dist
   environment:
       ENVIRONMENT: production
       TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"
